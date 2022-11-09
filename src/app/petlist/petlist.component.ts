@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Pet } from '../pet';
+import { PetsService } from '../pets.service';
 
 @Component({
   selector: 'app-petlist',
@@ -30,12 +31,14 @@ export class PetlistComponent implements OnInit {
   // component needed @Input.)
   // FOr the list, i recommend ng-container
 
-  TheList: Pet []= [
 
-    // // After testing, lets remove the test data. 
-    // {name:'muffin', species:'cat', born:1979}, 
-    // {name: 'Donald Duck', species: 'bird', born: 2007}
-  ]
+  //The list is now stored as a service in the service file
+  // TheList: Pet []= [
+
+  //   // // After testing, lets remove the test data. 
+  //   // {name:'muffin', species:'cat', born:1979}, 
+  //   // {name: 'Donald Duck', species: 'bird', born: 2007}
+  // ]
 
   // For the add: 
   //    We create the form 
@@ -47,31 +50,59 @@ export class PetlistComponent implements OnInit {
   newSpecies: string = '';
   newBorn: number = 0; 
 
-
-  constructor() { }
+// Lets have Angular give us the one instance
+// Of the pet list from the Pets Service
+// We are injecting this from our PetsService. 
+// So we now have an instance of PetsService stored
+// in a public member variable called "PetSrv"
+// We can access it using this.PetSrv
+  constructor(public PetSrv: PetsService ) { }
 
   ngOnInit(): void {
   }
 
-  add(){
-      // Create a new Pet object and add it to the list
-      // Then clear out the input boxes
-      this.TheList.push({
-        name: this.newName, 
-        species: this.newSpecies, 
-        born: this.newBorn
-      }); 
-      this.newName = ''; 
-      this.newSpecies = '';
-      this.newBorn = 0;
+  // add(){
+  //     // Create a new Pet object and add it to the list
+  //     // Then clear out the input boxes
+  //     this.TheList.push({
+  //       name: this.newName, 
+  //       species: this.newSpecies, 
+  //       born: this.newBorn
+  //     }); 
+  //     this.newName = ''; 
+  //     this.newSpecies = '';
+  //     this.newBorn = 0;
 
-  }
+  // }
+
+  add(){
+    // We have to use the get method to get the information from PetSrv
+    this.PetSrv.get().push({
+      name: this.newName, 
+      species: this.newSpecies, 
+      born: this.newBorn
+    }); 
+    this.newName = ''; 
+    this.newSpecies = '';
+    this.newBorn = 0;
+
+}
+
+  // deletePet(whichPet: Pet){
+  //   for (let i = 0; i < this.TheList.length; i++){
+  //     if (this.TheList[i] == whichPet){
+  //       // remove from the list 
+  //       this.TheList.splice(i, 1); 
+  //       return;
+  //     }
+  //   }
+  // }
 
   deletePet(whichPet: Pet){
-    for (let i = 0; i < this.TheList.length; i++){
-      if (this.TheList[i] == whichPet){
+    for (let i = 0; i < this.PetSrv.get().length; i++){
+      if (this.PetSrv.get()[i] == whichPet){
         // remove from the list 
-        this.TheList.splice(i, 1); 
+        this.PetSrv.get().splice(i, 1); 
         return;
       }
     }

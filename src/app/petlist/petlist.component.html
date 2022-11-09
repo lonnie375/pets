@@ -1,4 +1,4 @@
-<ng-container *ngFor="let pet of TheList">
+<ng-container *ngFor="let pet of PetSrv.get()">
     <!--  For delete, we have to listen for a delete event!-->
     <app-pet-detail (delete)="deletePet($event)" [ThePet]="pet"></app-pet-detail>
 </ng-container>
